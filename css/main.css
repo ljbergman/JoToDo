@@ -1,0 +1,364 @@
+@charset "UTF-8";
+@font-face {
+  font-family: CafeFrancoise-EapP9;
+  font-weight: bold;
+  src: url("../fonts/CafeFrancoise-EapP9.ttf") format("truetype");
+}
+
+body {
+  padding: 0px;
+  background-color: #eee;
+  margin: 0 auto;
+  text-align: center;
+}
+
+@media only screen and (max-width: 510px) {
+  body {
+    transform: scale(0.9);
+    transform-origin: 0 0;
+  }
+}
+header, footer, nav, article {
+  font-size: 28px;
+  font-family: arial, verdana, sans-serif;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border: 0px solid #bbb;
+}
+header .logo {
+  width: 160px;
+  border: 0;
+}
+
+/* ----- Screen width 1520+ px ------ */
+@media only screen and (min-width: 1520px) {
+  header .logo {
+    width: 200px;
+  }
+}
+/* ----- Screen width up to 530px ------ */
+@media only screen and (max-width: 530px) {
+  header {
+    width: 480px;
+  }
+  header .logo {
+    width: 160px;
+  }
+}
+nav {
+  background-image: linear-gradient(to right, #ff9000 0%, #aa5b2d 51%, #523403 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%; /* default: 90% */
+  margin-right: auto;
+  margin-left: auto;
+  border: 5px solid #ddd;
+  border-radius: 12px;
+  background-color: #495E57;
+  padding: 10px 0 10px 0;
+  height: 30px;
+}
+nav ul {
+  margin: 0;
+  padding: 0;
+}
+nav ul li {
+  font-size: 26px;
+  font-family: CafeFrancoise-EapP9, arial, verdana, sans-serif;
+  display: inline;
+  margin: 0px;
+  padding: 0px;
+}
+nav a:link {
+  text-decoration: none;
+  color: white;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 0px 7px 0px 7px;
+}
+nav a:visited {
+  text-decoration: none;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+}
+nav a:hover:not(.active) {
+  background-color: #bbb;
+  border-radius: 5px;
+  margin: 10px;
+}
+nav a:active {
+  text-decoration: none;
+  color: #fff;
+  border-radius: 5px;
+  margin: 10px;
+  border: 2px solid black;
+}
+
+/* ----- Screen width up to 530px ------ */
+@media only screen and (max-width: 530px) {
+  nav {
+    width: 480px;
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
+  }
+}
+
+
+
+p {
+  font-size: 12px;
+  font-family: arial, verdana, sans-serif;
+}
+
+footer {
+  display: block;
+  text-align: center;
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-left: 5px solid #ddd;
+  border-right: 5px solid #ddd;
+  border-top: 5px solid #ddd;
+  border-bottom: 5px solid #ddd;
+  border-radius: 12px 12px 12px 12px;
+  height: auto;
+  background-color: #bbb;
+}
+
+
+
+/* ----- Screen width up to 530px ------ */
+@media only screen and (max-width: 530px) {
+  footer {
+    width: 480px;
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-bottom: 0px;
+  }
+}
+.promo-header {
+  display: block;
+  text-align: left;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999999;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+  border-radius: 12px;
+  /* Promo background */
+  background: linear-gradient(rgba(205, 205, 205, 0.2), rgba(0, 0, 0, 0.2)), url("../images/todolist.jpg");
+  background-position: center;
+  background-position-y: bottom;
+  background-size: cover;
+  width: 48%;
+  height: 300px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1%;
+  font-size: 34px;
+  font-family: CafeFrancoise-EapP9, arial, verdana, sans-serif;
+  color: #ffffff;
+  text-shadow: 1.5px 1.5px #000000; /* Deafult: text-shadow: 1.7px 0 #000;  */
+  letter-spacing: 5px;
+  padding-left: 15px;
+  padding-top: 15px;
+  /* Promo Animation*/
+
+  animation: img-transition 25s infinite ease-in-out;
+}
+.promo-header #promo-div {
+  display: block;
+  margin: 0px;
+  padding: 0px 0px 0px 0px;
+  border: 0px;
+  width: 464px;
+}
+.promo-header #promo-div h1 {
+  font-family: CafeFrancoise-EapP9, arial, verdana, sans-serif;
+  font-size: 50px;
+  padding-left: 50px;
+}
+.promo-header #promo-div .promo-text {
+  font-family: CafeFrancoise-EapP9, arial, verdana, sans-serif;
+  font-size: 22px;
+  padding-left: 50px;
+  display: block;
+  width: 360px;
+}
+
+/* ----- Screen width up to 510px ------ */
+@media only screen and (max-width: 510px) {
+  .promo-header {
+    width: 468px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999999;
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px;
+  }
+}
+/* Header animation keyframes */
+@keyframes img-transition {
+  from {
+    background-position-y: top;
+  }
+  to {
+    background-position-y: bottom;
+  }
+}
+
+.section2 {
+  display: block;
+  width: 94%;
+  margin-right: 3%;
+  margin-left: 3%;
+  margin-top: 1%;
+  border: 0px solid #bbb;
+}
+
+
+
+
+
+
+
+
+input {
+  font-size: 1.2rem;
+  font-family: arial, verdana, sans-serif;
+  border: 1px solid #000;
+  width: 220px;
+  height: 30px;
+  border-radius: 6px;
+  margin: 0px 10px 0px 1px;
+  padding: 4px 10px 4px 10px;
+}
+
+select {
+  width: 136px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+/* input field for excluding ingredients */
+#exclude-ingredients {
+  width: 100px;
+  height: 20px;
+  font-size: 0.8rem;
+  color: #000;
+}
+
+input[type=checkbox] {
+  width: 20px;
+  margin: 0px 6px 0px 0px;
+  vertical-align: middle;
+  accent-color: rgb(138, 231, 39);
+}
+
+
+
+
+
+/* ----- Screen width up to 510px ------ */
+@media only screen and (max-width: 510px) {
+
+
+
+
+}
+
+
+
+
+.adl {
+  margin-bottom: 20px;
+}
+
+.adl label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.adl input {
+  width: 86%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+footer button {
+  padding: 8px 16px;
+  width: 88%;
+  height: 50px;
+  font-size: 20px;
+  border: none;
+  background-color: #cf7500;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+footer button:hover {
+
+  background-color: #dc2100;
+
+}
+
+
+#todoTable {
+  width: 50%;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#todoTable th,
+#todoTable td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-family: arial, verdana;
+  font-size: 12px;
+}
+
+#todoTable th {
+  background-color: #f2f2f2;
+}
+
+
+#todoTable tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+#todoTable td button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #cf7500;
+  color: white;
+  cursor: pointer;
+}
+
+#todoTable td button:hover {
+  background-color: #dc4d00;
+}

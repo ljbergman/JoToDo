@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JoToDo - Your personal Todo List</title>
+  <meta name="description" content="JToDo List">
+  <meta name="author" content="Jonas Bergman">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-database.js"></script>
+  <script>
+      const firebaseConfig = {
+          apiKey: "AIzaSyAuVri7s2E2ovEB4_8KjynooDVKEITC2nw",
+          authDomain: "jtodo-8bd2e.firebaseapp.com",
+          databaseURL: "https://jtodo-8bd2e-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "jtodo-8bd2e",
+          storageBucket: "jtodo-8bd2e.appspot.com",
+          messagingSenderId: "170970992375",
+          appId: "1:170970992375:web:2375e162edadbaab60cdf2"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      var database = firebase.database();
+
+      var ref = database.ref('todolist');
+
+
+    function checkEndDate(endDate) {
+
+        const currentDate = new Date();
+        const targetDate = new Date(endDate);
+
+        // Beräkna skillnaden i milisekunder mellan dagens datum och det angivna endDate:t
+        const timeDiff = targetDate - currentDate;
+
+        // Calculate the number of milliseconds in a day
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        if (timeDiff < 0) {
+            // Datumet har passerat
+            return 1;
+        } else if (timeDiff <= oneDay) {
+            // 1 dag eller mindre kvar
+            return 2;
+        } else {
+            // Datum har ej passerat
+            return 0;
+        }
+    }
+
+
+
+
+
+      var isEventListenerAdded = false;
+
+      function checkEventListenerAdded() {
+          return isEventListenerAdded;
+      }
+
+      if (!checkEventListenerAdded()) {
+          // Listen for new child nodes added to 'usersRef'
+          ref.on('child_added', function (snapshot) {
+              const user = snapshot.val();
+              appendRow(user);
+          });
+          isEventListenerAdded = true;
+
+      }
+
+      function setData() {
+
+          var status = document.getElementById("status");
+          var title = document.getElementById("title");
+          var description = document.getElementById("description");
+          var enddate = document.getElementById("enddate");
+
+          var newValueRef = ref.push();
+          var id = newValueRef.key;
+          newValueRef.set({ status: status.value, title: title.value, description: description.value, enddate: enddate.value, id: id });
+
+          status.value = '0';
+          title.value = '';
+          description.value = '';
+
+         // Resetta todoTable och loada pånytt från databasen    
+        let todoTable = document.getElementById("todoTable");
+        todoTable.innerHTML = "";
+        todoTable.innerHTML = `
+        
+        <thead>
+          <tr>
+              <th>Done</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>End date</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        
+        `;
+        
+        ref.on('child_added', function (snapshot) {
+              const user = snapshot.val();
+              appendRow(user);
+          });
+          
+      }
+
+      function updateData(rid, status) {
+
+        let todoTable = document.getElementById("todoTable");
+        const entryRef = database.ref('todolist').child(rid);
+
+        entryRef.update({
+            status: status,
+        // Lägg till fler fält om du t ex vill kunna uppdatera title, description etc
+        }, (error) => {
+        if (error) {
+            console.error('Update failed: ', error);
+        } else {
+            console.log('Update successful!');
+        }
+        });
+
+        // Resetta todoTable och loada pånytt från databasen    
+        todoTable.innerHTML = "";
+        todoTable.innerHTML = `
+        
+        <thead>
+          <tr>
+              <th>Done</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>End date</th>
+              <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        
+        `;
+        
+        ref.on('child_added', function (snapshot) {
+              const user = snapshot.val();
+              appendRow(user);
+          });
+
+
+      }
+
+      function appendRow(user) {
+
+          const tableBody = document.querySelector('#todoTable tbody');
+
+          const row = document.createElement('tr');
+          row.setAttribute('data-id', user.id);
+
+          // Visa röd bakgrundsfärg vid passerat datum och gul när det är mindre än 1 dag kvar
+          if ((user.status=="0") && (checkEndDate(user.enddate)==1)) {
+            row.style.backgroundColor = "#e8a69a";
+          } else if ((user.status=="0") && (checkEndDate(user.enddate)==2)) { 
+            row.style.backgroundColor = "#f8f094";
+          } else {
+            
+          }
+
+
+          const doneCell = document.createElement('td');
+          const doneCheckbox = document.createElement('input');
+          doneCheckbox.type = "checkbox";
+
+        // Om användaren Bockat av inlägget, visa ibockning/check
+        if (user.status=="1") {
+            doneCheckbox.checked = true;
+         } else {
+            doneCheckbox.checked = false;  
+         }
+
+         doneCheckbox.addEventListener('change', function () {
+
+            let cstatus = "0";
+                
+            if (doneCheckbox.checked) {
+                    // Checkbox checked
+                    cstatus = "1";
+                } else {    
+                    // Checkbox unchecked
+                    cstatus = "0";
+                }
+
+              updateData(user.id, cstatus);
+
+          });
+
+          doneCell.appendChild(doneCheckbox);
+          row.appendChild(doneCell);
+
+          const titleCell = document.createElement('td');
+          titleCell.textContent = user.title;
+          if (user.status=="1") { titleCell.style.textDecoration = 'line-through'; }
+
+          row.appendChild(titleCell);
+
+          const descCell = document.createElement('td');
+          descCell.textContent = user.description;
+          if (user.status=="1") { descCell.style.textDecoration = 'line-through'; }
+          row.appendChild(descCell);
+
+          const enddateCell = document.createElement('td');
+          enddateCell.textContent = user.enddate;
+          row.appendChild(enddateCell);
+
+          const removeCell = document.createElement('td');
+          const removeButton = document.createElement('button');
+          removeButton.textContent = 'Remove';
+          removeButton.addEventListener('click', function () {
+              removeRow(user.id);
+          });
+          removeCell.appendChild(removeButton);
+          row.appendChild(removeCell);
+
+          tableBody.appendChild(row);
+
+      }
+
+      function removeRow(id) {
+          var userRef = ref.child(id);
+          userRef.remove()
+              .then(function () {
+                  const row = document.querySelector(`tr[data-id="${id}"]`);
+                  if (row) {
+                      row.remove();
+                  }
+              })
+              .catch(function (error) {
+                  console.error('Error removing user:', error);
+              });
+      }
+
+
+
+  </script>
+</head>
+<body>
+
+<header>
+<a href="index.html"><img src="images/todolist_logo.png" class="logo"></a>
+</header>
+<nav>
+<ul>
+    <li><a href="#" id="home-link">Home</a> &#10072; </li>
+    <li><a href="#" id="todo-link">ToDo List</a> &#10072; </li>
+    <li><a href="#" id="about-link">About</a> &#10072; </li>
+</ul>
+</nav>
+<main>
+<section class="promo-header" id="main-header">
+
+  <div id="promo-div">
+
+  <div style="display: inline;">
+  <h1>Welcome to JoToDo</h1>
+  <p class="promo-text">Your personal ToDo List</p>
+  </div>
+
+</div>
+
+
+
+</section>
+<section class="section2">
+
+    <table id="todoTable">
+      <thead>
+          <tr>
+              <th>Done</th>
+              <th>Title</th>
+              <th>Description</th>
+              <th>End date</th>
+              <th></th>
+          </tr>
+      </thead>
+      <tbody></tbody>
+  </table>
+
+</section>
+</main>
+<footer>
+<div class="footer">
+
+
+    <div class="adl">
+        <label for="title">Title</label>
+        <input type="text" id="title">
+        <input type="hidden" id="status" value="0">
+    </div>
+    <div class="adl">
+        <label for="description">Description</label>
+        <input type="text" id="description">
+    </div>
+    <div class="adl">
+         <label for="enddate">End date</label>
+        <input type="datetime-local" id="enddate">
+    </div>
+
+    <button onclick="setData()">Add to list</button>
+
+
+
+</footer>
+
+</body>
+</html>
+
